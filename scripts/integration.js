@@ -11,13 +11,16 @@ window.onload = function() {
     }
   }
 
+  var database_updates = new Bacon.Bus();
   var click_events = Bacon.fromEventTarget($(document), "click");
   var create_events = u.first_of_pair(click_events)
     .map(f.extract_position)
     .map(f.new_node_details)
     .map(f.database_create_message)
 
-  create_events
+  database_updates.plug(create_events);
+
+  database_updates
     .onValue(f.send_to_socket, outgoing_socket);
 }
 
