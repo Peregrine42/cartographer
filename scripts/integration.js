@@ -17,12 +17,14 @@ window.onload = function() {
   }
 
   var click_events = highland("click", $(document));
-  var create_events = u.first_of_pair(click_events)
+  var create_requests = u.first_of_pair(click_events)
     .map(f.extract_position)
     .map(f.new_node_details)
     .map(f.database_create_message)
 
-  var for_database = highland([create_events, highland([request_read_all()])]).merge();
+  var read_requests = highland();
+  read_requests.write(request_read_all());
+  var for_database = highland([create_requests, read_requests]).merge();
 
   for_database
     .each(highland.partial(f.send_to_socket, outgoing_socket));
