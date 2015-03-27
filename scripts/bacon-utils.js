@@ -23,7 +23,6 @@ function first_of_pair(clicked) {
   var time_window = 400;
   var click_amount = 2;
   var double_clicks = time_filter(clicked, time_window, click_amount)
-    .each(function(x) { console.log(x) })
 
   return double_clicks;
 }

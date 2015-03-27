@@ -1,4 +1,4 @@
-f = require("../scripts/spike.js");
+f = require("../scripts/functions.js");
 
 describe("send_create_node", function() {
   it("sends the given node details to the given socket", function() {
