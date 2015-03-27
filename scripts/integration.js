@@ -1,7 +1,8 @@
-var f     = require("./spike.js");
-var u     = require("./bacon-utils.js");
-var $     = require("jquery-browserify");
-var Bacon = require("./Bacon.js");
+var f        = require("./spike.js");
+var u        = require("./bacon-utils.js");
+var $        = require("jquery-browserify");
+var Bacon    = require("./Bacon.js");
+var highland = require("../node_modules/highland/lib/index.js");
 
 window.onload = function() {
   // TODO: stub socket
@@ -12,15 +13,15 @@ window.onload = function() {
   }
 
   var database_updates = new Bacon.Bus();
-  var click_events = Bacon.fromEventTarget($(document), "click");
+  var click_events = highland("click", $(document));
   var create_events = u.first_of_pair(click_events)
-    .map(f.extract_position)
-    .map(f.new_node_details)
-    .map(f.database_create_message)
+    //.map(f.extract_position)
+    //.map(f.new_node_details)
+    //.map(f.database_create_message)
 
-  database_updates.plug(create_events);
+  //database_updates.plug(create_events);
 
-  database_updates
-    .onValue(f.send_to_socket, outgoing_socket);
+  //database_updates
+    //.onValue(f.send_to_socket, outgoing_socket);
 }
 
