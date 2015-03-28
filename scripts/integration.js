@@ -15,17 +15,13 @@ var event_1 = {
   ]
 };
 
-var f        = require("./functions.js");
-var u        = require("./bacon-utils.js");
-var $        = require("jquery-browserify");
+var f = require("./functions.js");
+var u = require("./bacon-utils.js");
+var $ = require("jquery-browserify");
 var highland = require("highland");
 
 function request_read_all() {
   return { "action": "read", "type": "node", "args": [] };
-}
-
-function clear_nodes($) {
-  $("div.node").remove();
 }
 
 var partial = highland.partial
@@ -38,31 +34,32 @@ window.onload = function() {
     }
   }
 
-  var click_events = highland("click", $(document));
-  var create_requests = u.first_of_pair(click_events)
-    .map(f.extract_position)
-    .map(f.new_node_details)
-    .map(f.database_create_message)
+  var target_div = $("#" + "graph-target");
 
-  var read_requests = highland();
-  var for_database = highland([create_requests, read_requests]).merge();
+  //var click_events = highland("click", $(document));
+  //var create_requests = u.first_of_pair(click_events)
+    //.map(f.extract_position)
+    //.map(f.new_node_details)
+    //.map(f.database_create_message)
 
-  for_database
-    .each(highland.partial(f.send_to_socket, outgoing_socket));
+  //var read_requests = highland();
+  //var for_database = highland([create_requests, read_requests]).merge();
+
+  //for_database
+    //.each(highland.partial(f.send_to_socket, outgoing_socket));
 
   //var server_events = new EventSource("/connect");
   var server_events = highland([event_1]);
-  var create_events = server_events
+  var read_events = server_events
     .fork()
     .where({ "action": "read", "type": "node" })
-    .doto(partial(clear_nodes, $))
-    .each(node_constructor);
 
-  server_events_log = server_events
+  var server_events_log = server_events
     .fork()
     .each(function(message) {
     console.log("received from server:", message);
   });
 
-  read_requests.write(request_read_all());
+  //read_requests.write(request_read_all());
+
 }

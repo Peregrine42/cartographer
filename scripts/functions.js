@@ -30,8 +30,13 @@ function clear_nodes(target, clazz) {
   target.find("." + clazz).remove();
 }
 
+function node_constructor(target) {
+
+}
+
 module.exports.send_to_socket = send_to_socket;
 module.exports.database_create_message = database_create_message;
 module.exports.extract_position = extract_position;
 module.exports.new_node_details = new_node_details;
 module.exports.clear_nodes = clear_nodes;
+module.exports.node_constructor = node_constructor;
